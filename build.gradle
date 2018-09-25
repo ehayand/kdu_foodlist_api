@@ -27,6 +27,12 @@ repositories {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-web')
+
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.53.1'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version: '2.53.1'
+
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+
     runtime('com.h2database:h2')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
