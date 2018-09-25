@@ -43,26 +43,29 @@ public class Parser {
 
             driver.get(ROOT_URL + TARGET_URL);
 
-            Thread.sleep(2000);
+            for (int i = 0; i < 2; i++) {
+                Thread.sleep(2000);
+                WebElement tbody = driver.findElement(By.xpath("//*[@id=\"Board_LISTD\"]"));
 
-            WebElement tbody = driver.findElement(By.xpath("//*[@id=\"Board_LISTD\"]"));
+                List<WebElement> articles = tbody.findElements(By.tagName("tr"));
+                String date = null;
+                for (WebElement tr : articles) {
+                    List<String> raw = new ArrayList<>();
+                    List<WebElement> tds = tr.findElements(By.tagName("td"));
+                    if (tds.size() < 3) raw.add(date);
 
-            List<WebElement> articles = tbody.findElements(By.tagName("tr"));
-            String date = null;
-            for (WebElement tr : articles) {
-                List<String> raw = new ArrayList<>();
-                List<WebElement> tds = tr.findElements(By.tagName("td"));
-                if (tds.size() < 3) raw.add(date);
+                    for (WebElement td : tds) {
+                        List<WebElement> attributes = td.findElements(By.tagName("span"));
+                        raw.add(attributes.get(0).getText());
+                    }
 
-                for (WebElement td : tds) {
-                    List<WebElement> attributes = td.findElements(By.tagName("span"));
-                    raw.add(attributes.get(0).getText());
+                    date = raw.get(0);
+
+                    MenuData menuData = process(raw);
+                    processed.add(menuData);
                 }
 
-                date = raw.get(0);
-
-                MenuData menuData = process(raw);
-                processed.add(menuData);
+                driver.findElement(By.xpath("//*[@class=\"cursor next\"]")).click();
             }
 
             driver.quit();

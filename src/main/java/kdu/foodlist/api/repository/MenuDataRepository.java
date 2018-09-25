@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface MenuDataRepository extends CrudRepository<MenuData, Long> {
 
-    @Query("SELECT data FROM MenuData data WHERE data.month = :month OR data.date = :date")
+    @Query("SELECT data FROM MenuData data WHERE data.month = :month AND data.date = :date")
     Iterable<MenuData> findByDate(@Param("month") String month, @Param("date") String date);
 
 }

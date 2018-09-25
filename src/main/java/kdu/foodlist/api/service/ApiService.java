@@ -4,11 +4,15 @@ import kdu.foodlist.api.model.Keyboard;
 import kdu.foodlist.api.model.MenuData;
 import kdu.foodlist.api.model.Message;
 import kdu.foodlist.api.parsing.Parser;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ehay@naver.com on 2018-09-24
@@ -25,25 +29,6 @@ public class ApiService {
     @Autowired
     private DataAcessService dataAcessService;
 
-    // 삭제 예정
-    @GetMapping(value = "testdata")
-    public void insertTestData() {
-        dataAcessService.saveAll();
-    }
-
-    // 삭제 예정
-    @PostMapping(value = "/testOne")
-    public MenuData insertTestOne(@RequestBody Map<String, String> body){
-        List<String> raw = new ArrayList<>();
-        raw.add(body.get("date"));
-        raw.add(body.get("title"));
-        raw.add(body.get("content"));
-
-        Parser parser = new Parser();
-
-        return parser.process(raw);
-    }
-
     @GetMapping(value = "/keyboard")
     public Keyboard keyboard() {
         if (this.keyboard == null) {
@@ -56,6 +41,7 @@ public class ApiService {
 
     @PostMapping(value = "/message")
     public Map<String, Object> message(@RequestBody Map<String, String> body) {
+        // user_key 값을 저장, 사용하지 않음
         String user_key = body.get("user_key");
         String type = body.get("type");
         String content = body.get("content");
@@ -64,39 +50,33 @@ public class ApiService {
         Keyboard keyboard;
 
         // 로직
-        Date day;
-        String text = "";
+        DateTime theDay = new DateTime();
+
+        StringBuilder text = new StringBuilder();
+        String month;
+        String date;
 
         if ("내일".equals(content)) {
-            Date today = new Date();
-            day = new Date(today.getTime() + (long) (1000 * 60 * 60 * 24));
+            DateTime nextDay = theDay.plusDays(1);
 
-            text += "내일 학식정보 입니다.\n";
+            month = String.valueOf(nextDay.getMonthOfYear());
+            date = String.valueOf(nextDay.getDayOfMonth());
+
+            text.append("내일 학식정보 입니다.\n");
         } else {
-            day = new Date();
+            month = String.valueOf(theDay.getMonthOfYear());
+            date = String.valueOf(theDay.getDayOfMonth());
 
-            text += "오늘 학식정보 입니다.\n";
+            text.append("오늘 학식정보 입니다.\n");
         }
-
-        String month = String.valueOf(day.getMonth());
-        String date = String.valueOf(day.getDate());
-
 
         for (MenuData menuData : dataAcessService.findByDate(month, date)) {
-            text += menuData.toString();
-            text += "\n\n";
+            text.append(menuData.toString()).append("\n\n");
         }
 
-//        for (MenuData menuData : dataAcessService.findByDate(month, date)){
-//            text += menuData.toString();
-//            text += "\n";
-//        }
-
-
-        message = new Message(text);
+        message = new Message(text.toString());
         keyboard = keyboard();
         //
-
 
         Map<String, Object> map = new HashMap<>();
         map.put("message", message);
