@@ -62,17 +62,18 @@ public class ApiService {
             month = String.valueOf(nextDay.getMonthOfYear());
             date = String.valueOf(nextDay.getDayOfMonth());
 
-            text.append("내일 학식정보 입니다.\n");
+            text.append("내일 학식정보 입니다.\n\n");
         } else {
             month = String.valueOf(theDay.getMonthOfYear());
             date = String.valueOf(theDay.getDayOfMonth());
 
-            text.append("오늘 학식정보 입니다.\n");
+            text.append("오늘 학식정보 입니다.\n\n");
         }
 
         for (MenuData menuData : dataAcessService.findByDate(month, date)) {
             text.append(menuData.toString()).append("\n\n");
         }
+        text.delete(text.length()-2, text.length());
 
         message = new Message(text.toString());
         keyboard = keyboard();
