@@ -3,15 +3,12 @@ package kdu.foodlist.api.service;
 import kdu.foodlist.api.model.Keyboard;
 import kdu.foodlist.api.model.MenuData;
 import kdu.foodlist.api.model.Message;
-import kdu.foodlist.api.parsing.Parser;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,19 +21,22 @@ import java.util.Map;
 @RequestMapping(value = "/kdu/foodlist")
 public class ApiService {
 
-    private Keyboard keyboard;
+    private Keyboard[] keyboard;
 
     @Autowired
-    private DataAcessService dataAcessService;
+    private DataAccessService dataAccessService;
 
     @GetMapping(value = "/keyboard")
     public Keyboard keyboard() {
         if (this.keyboard == null) {
-            String[] buttons = {"오늘", "내일"};
-            this.keyboard = new Keyboard(buttons);
+            String[] buttonsDepthZero = {"오늘", "내일"};
+            String[] buttonsDepthOne = {"조식", "중식", "석식"};
+            this.keyboard = new Keyboard[2];
+            this.keyboard[0].setButtons(buttonsDepthZero);
+            this.keyboard[1].setButtons(buttonsDepthOne);
         }
 
-        return this.keyboard;
+        return this.keyboard[0];
     }
 
     @PostMapping(value = "/message")
@@ -70,7 +70,7 @@ public class ApiService {
             text.append("오늘 학식정보 입니다.\n\n");
         }
 
-        for (MenuData menuData : dataAcessService.findByDate(month, date)) {
+        for (MenuData menuData : dataAccessService.findByDate(month, date)) {
             text.append(menuData.toString()).append("\n\n");
         }
         text.delete(text.length()-2, text.length());

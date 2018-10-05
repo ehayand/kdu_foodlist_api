@@ -17,4 +17,10 @@
   - 메모리 데이터베이스를 이용하여 빠른 배포를 한다.
 - 스케줄링을 이용하여 일정한 시간 간격으로 데이터베이스 초기화를 실행한다.
 - 학교 데이터를 공급받을 수 없기 때문에 웹 파싱을 통해 데이터를 공급받는다.
+  - Selenium ChromeDriver 이용
 - '오늘', '내일' 외 추가적인 인터페이스 제공 예정
+  - Depth 추가 (오늘, 내일) -> (조식, 중식, 석식)
+    - Keyboard 수정 완료
+    - MenuDataRepository 수정 중
+    - DataAccessService 수정 중
+    - ApiService 수정 중

@@ -30,6 +30,10 @@ public class Keyboard {
         return buttons;
     }
 
+    public void setButtons(String[] buttons) {
+        this.buttons = buttons;
+    }
+
     @Override
     public String toString() {
         return "Keyboard{" +
