@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 @Service
-public class DataAcessService {
+public class DataAccessService {
 
     @Autowired
     MenuDataRepository menuDataRepository;
@@ -60,7 +60,7 @@ public class DataAcessService {
      */
     // db 초기화 및 데이터 리셋
     @PostConstruct // setup  실행시 데이터 파싱 및 db 초기화
-    @Scheduled(cron = "0 0 5 * * *")
+    @Scheduled(cron = "0 35 9,13 * * *") // 09시 35분, 13시 35분 마다 실행
     public void reset() {
         try {
             deleteAll();
