@@ -19,8 +19,11 @@ import java.util.List;
 @Service
 public class DataAccessService {
 
-    @Autowired
-    MenuDataRepository menuDataRepository;
+    private final MenuDataRepository menuDataRepository;
+
+    public DataAccessService(MenuDataRepository menuDataRepository) {
+        this.menuDataRepository = menuDataRepository;
+    }
 
     public void saveAll() {
         Parser parser = new Parser();

@@ -1,8 +1,9 @@
-package kdu.foodlist.api.service;
+package kdu.foodlist.api.controller;
 
 import kdu.foodlist.api.model.Keyboard;
 import kdu.foodlist.api.model.MenuData;
 import kdu.foodlist.api.model.Message;
+import kdu.foodlist.api.service.DataAccessService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,13 @@ import java.util.Map;
 @RequestMapping(value = "/kdu/foodlist")
 public class ApiService {
 
+
+    private final DataAccessService dataAccessService;
     private Keyboard[] keyboard;
 
-    @Autowired
-    private DataAccessService dataAccessService;
+    public ApiService(DataAccessService dataAccessService) {
+        this.dataAccessService = dataAccessService;
+    }
 
     @GetMapping(value = "/keyboard")
     public Keyboard keyboard() {
